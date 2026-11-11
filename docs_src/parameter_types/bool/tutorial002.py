@@ -1,16 +1,19 @@
-from typing import Optional
+from typing import Annotated
 
 import typer
 
+app = typer.Typer()
 
-def main(accept: Optional[bool] = typer.Option(None, "--accept/--reject")):
+
+@app.command()
+def main(accept: Annotated[bool | None, typer.Option("--accept/--reject")] = None):
     if accept is None:
-        typer.echo("I don't know what you want yet")
+        print("I don't know what you want yet")
     elif accept:
-        typer.echo("Accepting!")
+        print("Accepting!")
     else:
-        typer.echo("Rejecting!")
+        print("Rejecting!")
 
 
 if __name__ == "__main__":
-    typer.run(main)
+    app()

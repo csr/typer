@@ -1,3 +1,5 @@
+# Add Typer
+
 We'll start with the core idea.
 
 To add a `typer.Typer()` app inside of another.
@@ -8,16 +10,14 @@ Let's imagine that you are creating a *CLI program* to manage items in some dist
 
 It could be in an `items.py` file with this:
 
-```Python
-{!../docs_src/subcommands/tutorial001/items.py!}
-```
+{* docs_src/subcommands/tutorial001/items.py *}
 
 And you would use it like:
 
 <div class="termy">
 
 ```console
-$ python items.py create Wand
+$ uv run python items.py create Wand
 
 Creating item: Wand
 ```
@@ -30,16 +30,14 @@ But then you realize that you also have to manage users from your *CLI app*.
 
 It could be a file `users.py` with something like:
 
-```Python
-{!../docs_src/subcommands/tutorial001/users.py!}
-```
+{* docs_src/subcommands/tutorial001/users.py *}
 
 And you would use it like:
 
 <div class="termy">
 
 ```console
-$ python users.py create Camila
+$ uv run python users.py create Camila
 
 Creating user: Camila
 ```
@@ -56,9 +54,7 @@ In this case, as with `git remote`, we can put them together as subcommands in a
 
 Now create a `main.py` with:
 
-```Python hl_lines="3 4  7 8"
-{!../docs_src/subcommands/tutorial001/main.py!}
-```
+{* docs_src/subcommands/tutorial001/main.py hl[3,4,7,8] *}
 
 Here's what we do in `main.py`:
 
@@ -78,7 +74,7 @@ Check it:
 
 ```console
 // Check the help
-$ python main.py --help
+$ uv run python main.py --help
 
 Usage: main.py [OPTIONS] COMMAND [ARGS]...
 
@@ -88,8 +84,8 @@ Options:
   --help                Show this message and exit.
 
 Commands:
-  items
   users
+  items
 ```
 
 </div>
@@ -102,7 +98,7 @@ Let's check the `items` command:
 
 ```console
 // Check the help for items
-$ python main.py items --help
+$ uv run python main.py items --help
 
 // It shows its own commands (subcommands): create, delete, sell
 Usage: main.py items [OPTIONS] COMMAND [ARGS]...
@@ -116,26 +112,29 @@ Commands:
   sell
 
 // Try it
-$ python main.py items create Wand
+$ uv run python main.py items create Wand
 
 Creating item: Wand
 
-$ python main.py items sell Vase
+$ uv run python main.py items sell Vase
 
 Selling item: Vase
 ```
 
 </div>
 
-!!! tip
-    Notice that we are still calling `$ python main.py` but now we are using the command `items`.
+/// tip
+
+Notice that we are still calling `$ python main.py` but now we are using the command `items`.
+
+///
 
 And now check the command `users`, with all its subcommands:
 
 <div class="termy">
 
 ```console
-$ python main.py users --help
+$ uv run python main.py users --help
 
 Usage: main.py users [OPTIONS] COMMAND [ARGS]...
 
@@ -147,7 +146,7 @@ Commands:
   delete
 
 // Try it
-$ python main.py users create Camila
+$ uv run python main.py users create Camila
 
 Creating user: Camila
 ```
@@ -166,4 +165,4 @@ Do you need sub-sub-sub-subcommands? Go ahead, create all the `typer.Typer()`s y
 
 In the next sections we'll update this with more features, but you already have the core idea.
 
-This way, in the same spirit of Click, **Typer** applications are composable, each `typer.Typer()` can be a *CLI app* by itself, but it can also be added as a command group to another Typer app.
+This way, **Typer** applications are composable, each `typer.Typer()` can be a *CLI app* by itself, but it can also be added as a command group to another Typer app.

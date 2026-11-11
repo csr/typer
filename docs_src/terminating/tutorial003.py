@@ -1,12 +1,15 @@
 import typer
 
+app = typer.Typer()
 
+
+@app.command()
 def main(username: str):
     if username == "root":
-        typer.echo("The root user is reserved")
+        print("The root user is reserved")
         raise typer.Abort()
-    typer.echo(f"New user created: {username}")
+    print(f"New user created: {username}")
 
 
 if __name__ == "__main__":
-    typer.run(main)
+    app()

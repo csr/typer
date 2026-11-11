@@ -1,57 +1,68 @@
+import importlib
 import os
 import subprocess
+import sys
+from pathlib import Path
+from types import ModuleType
 
-import typer
+import pytest
 from typer.testing import CliRunner
-
-from docs_src.options.version import tutorial003 as mod
 
 runner = CliRunner()
 
-app = typer.Typer()
-app.command()(mod.main)
+
+@pytest.fixture(
+    name="mod",
+    params=[
+        pytest.param("tutorial003_non_an"),
+        pytest.param("tutorial003"),
+    ],
+)
+def get_mod(request: pytest.FixtureRequest) -> ModuleType:
+    module_name = f"docs_src.options.version.{request.param}"
+    mod = importlib.import_module(module_name)
+    return mod
 
 
-def test_1():
-    result = runner.invoke(app, ["--name", "Rick", "--version"])
+def test_1(mod: ModuleType):
+    result = runner.invoke(mod.app, ["--name", "Rick", "--version"])
     assert result.exit_code == 0
     assert "Awesome CLI Version: 0.1.0" in result.output
 
 
-def test_2():
-    result = runner.invoke(app, ["--name", "rick"])
+def test_2(mod: ModuleType):
+    result = runner.invoke(mod.app, ["--name", "rick"])
     assert result.exit_code != 0
-    assert "Error: Invalid value for '--name': Only Camila is allowed" in result.output
+    assert "Invalid value for '--name'" in result.output
+    assert "Only Camila is allowed" in result.output
 
 
-def test_3():
-    result = runner.invoke(app, ["--name", "Camila"])
+def test_3(mod: ModuleType):
+    result = runner.invoke(mod.app, ["--name", "Camila"])
     assert result.exit_code == 0
     assert "Hello Camila" in result.output
 
 
-def test_script():
+def test_script(mod: ModuleType):
     result = subprocess.run(
-        ["coverage", "run", mod.__file__, "--help"],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+        [sys.executable, "-m", "coverage", "run", mod.__file__, "--help"],
+        capture_output=True,
         encoding="utf-8",
     )
     assert "Usage" in result.stdout
 
 
-def test_completion():
+def test_completion(mod: ModuleType):
+    file_name = Path(mod.__file__).name
     result = subprocess.run(
-        ["coverage", "run", mod.__file__, " "],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+        [sys.executable, "-m", "coverage", "run", mod.__file__, " "],
+        capture_output=True,
         encoding="utf-8",
         env={
             **os.environ,
-            "_TUTORIAL003.PY_COMPLETE": "complete_bash",
-            "COMP_WORDS": "tutorial003.py --name Rick --v",
+            f"_{file_name.upper()}_COMPLETE": "complete_bash",
+            "COMP_WORDS": f"{file_name} --name Rick --v",
             "COMP_CWORD": "3",
-            "_TYPER_COMPLETE_TESTING": "True",
         },
     )
     assert "--version" in result.stdout

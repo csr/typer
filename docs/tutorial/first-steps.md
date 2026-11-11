@@ -1,13 +1,10 @@
+# First Steps
+
 ## The simplest example
 
 The simplest **Typer** file could look like this:
 
-```Python
-{!../docs_src/first_steps/tutorial001.py!}
-```
-
-!!! tip
-    You will learn more about `typer.echo()` later in the docs.
+{* docs_src/first_steps/tutorial001.py *}
 
 Copy that to a file `main.py`.
 
@@ -16,21 +13,21 @@ Test it:
 <div class="termy">
 
 ```console
-$ python main.py
+$ uv run python main.py
 
 Hello World
 
 // It just prints "Hello World".
 
 // Now check the --help
-$ python main.py --help
+$ uv run python main.py --help
 
-Usage: main.py [OPTIONS]
-
-Options:
-  --install-completion  Install completion for the current shell.
-  --show-completion     Show completion for the current shell, to copy it or customize the installation.
-  --help                Show this message and exit.
+<b> </b><font color="#F4BF75"><b>Usage: </b></font><b>main.py [OPTIONS]                            </b>
+<b>                                                     </b>
+<font color="#A5A5A1">╭─ Options ─────────────────────────────────────────╮</font>
+<font color="#A5A5A1">│ </font><font color="#A1EFE4"><b>--help</b></font>                        Show this message   │
+<font color="#A5A5A1">│                               and exit.           │</font>
+<font color="#A5A5A1">╰───────────────────────────────────────────────────╯</font>
 ```
 
 </div>
@@ -64,39 +61,41 @@ They are a bit different from **CLI options** that you will see later below.
 
 Update the previous example with an argument `name`:
 
-```Python hl_lines="4 5"
-{!../docs_src/first_steps/tutorial002.py!}
-```
+{* docs_src/first_steps/tutorial002.py hl[4,5] *}
 
 <div class="termy">
 
 ```console
 
-$ python main.py
+$ uv run python main.py
 
 // If you run it without the argument, it shows a nice error
-Usage: main.py [OPTIONS] NAME
-Try "main.py --help" for help.
+<font color="#F4BF75">Usage: </font>main.py [OPTIONS] {name}
+<font color="#A5A5A1">Try </font><font color="#44919F">&apos;main.py </font><font color="#44919F"><b>--help</b></font><font color="#44919F">&apos;</font><font color="#A5A5A1"> for help.</font>
+<font color="#F92672">╭─ Error ───────────────────────────────────────────╮</font>
+<font color="#F92672">│</font> Missing argument &apos;name&apos;.                          <font color="#F92672">│</font>
+<font color="#F92672">╰───────────────────────────────────────────────────╯</font>
 
-Error: Missing argument 'NAME'.
-
-// Now pass that NAME CLI argument
-$ python main.py Camila
+// Now pass that 'name' CLI argument
+$ uv run python main.py Camila
 
 Hello Camila
 
 // Here "Camila" is the CLI argument
 
 // To pass a name with spaces for the same CLI argument, use quotes
-$ python main.py "Camila Gutiérrez"
+$ uv run python main.py "Camila Gutiérrez"
 
 Hello Camila Gutiérrez
 ```
 
 </div>
 
-!!! tip
-    If you need to pass a single value that contains spaces to a *CLI argument*, use quotes (`"`) around it.
+/// tip
+
+If you need to pass a single value that contains spaces to a *CLI argument*, use quotes (`"`) around it.
+
+///
 
 ## Two CLI arguments
 
@@ -104,55 +103,57 @@ Now let's say we want to have the name and last name separated.
 
 So, extend that to have 2 arguments, `name` and `lastname`:
 
-```Python hl_lines="4 5"
-{!../docs_src/first_steps/tutorial003.py!}
-```
+{* docs_src/first_steps/tutorial003.py hl[4,5] *}
 
 <div class="termy">
 
 ```console
 // Check the main --help
-$ python main.py --help
+$ uv run python main.py --help
 
-Usage: main.py [OPTIONS] NAME LASTNAME
-
-Arguments:
-  NAME      [required]
-  LASTNAME  [required]
-
-Options:
-  --install-completion  Install completion for the current shell.
-  --show-completion     Show completion for the current shell, to copy it or customize the installation.
-  --help                Show this message and exit.
+<b> </b><font color="#F4BF75"><b>Usage: </b></font><b>main.py [OPTIONS] {name} {lastname}                            </b>
+<b>                                                                   </b>
+<font color="#A5A5A1">╭─ Arguments ─────────────────────────────────────────────────────╮</font>
+<font color="#A5A5A1">│ </font><font color="#F92672">*</font>    name          <font color="#F4BF75"><b>&lt;str&gt;</b></font>  <font color="#A6194C">[required]</font>                            │
+<font color="#A5A5A1">│ </font><font color="#F92672">*</font>    lastname      <font color="#F4BF75"><b>&lt;str&gt;</b></font>  <font color="#A6194C">[required]</font>                            │
+<font color="#A5A5A1">╰─────────────────────────────────────────────────────────────────╯</font>
+<font color="#A5A5A1">╭─ Options ───────────────────────────────────────────────────────╮</font>
+<font color="#A5A5A1">│ </font><font color="#A1EFE4"><b>--help</b></font>                                   Show this message and  │
+<font color="#A5A5A1">│                                          exit.                  │</font>
+<font color="#A5A5A1">╰─────────────────────────────────────────────────────────────────╯</font>
 
 // There are now 2 CLI arguments, name and lastname
 
 // Now pass a single name argument
-$ python main.py Camila
+$ uv run python main.py Camila
 
-Usage: main.py [OPTIONS] NAME LASTNAME
-Try "main.py --help" for help.
-
-Error: Missing argument 'LASTNAME'.
+<font color="#F4BF75">Usage: </font>main.py [OPTIONS] {name} {lastname}
+<font color="#A5A5A1">Try </font><font color="#44919F">&apos;main.py </font><font color="#44919F"><b>--help</b></font><font color="#44919F">&apos;</font><font color="#A5A5A1"> for help.</font>
+<font color="#F92672">╭─ Error ───────────────────────────────────────────╮</font>
+<font color="#F92672">│</font> Missing argument &apos;lastname&apos;.                      <font color="#F92672">│</font>
+<font color="#F92672">╰───────────────────────────────────────────────────╯</font>
 
 // These 2 arguments are required, so, pass both:
-$ python main.py Camila Gutiérrez
+$ uv run python main.py Camila Gutiérrez
 
 Hello Camila Gutiérrez
 ```
 
 </div>
 
-!!! tip
-    Notice that the order is important. The last name has to go after the first name.
+/// tip
 
-    If you called it with:
+Notice that the order is important. The last name has to go after the first name.
 
-    ```
-    $ python main.py Gutiérrez Camila
-    ```
+If you called it with:
 
-    your app wouldn't have a way to know which is the `name` and which the `lastname`. It expects the first *CLI argument* to be the `name` and the second *CLI argument* to be the `lastname`.
+```
+$ uv run python main.py Gutiérrez Camila
+```
+
+your app wouldn't have a way to know which is the `name` and which the `lastname`. It expects the first *CLI argument* to be the `name` and the second *CLI argument* to be the `lastname`.
+
+///
 
 ## What is a **CLI option**
 
@@ -190,7 +191,7 @@ $ ls --size ./myproject
 
 </div>
 
-The main visual difference between a *CLI option* and and a *CLI argument* is that the *CLI option* has `--` prepended to the name, like in "`--size`".
+The main visual difference between a *CLI option* and a *CLI argument* is that the *CLI option* has `--` prepended to the name, like in "`--size`".
 
 A *CLI option* doesn't depend on the order because it has a predefined name (here it's `--size`). This is because the CLI app is looking specifically for a literal `--size` parameter (also known as "flag" or "switch"), with that specific "name" (here the specific name is "`--size`"). The CLI app will check if you typed it or not, it will be actively looking for `--size` even if you didn't type it (to check if it's there or not).
 
@@ -212,18 +213,19 @@ So, the main and **most important** difference is that:
 * *CLI options* **start with `--`** and don't depend on the order
 * *CLI arguments* depend on the **sequence order**
 
-!!! tip
-    In this example above the *CLI option* `--size` is just a "flag" or "switch" that will contain a boolean value, `True` or `False`, depending on if it was added to the command or not.
+/// tip
 
-    This one doesn't receive any values. But *CLI options* can also receive values like *CLI arguments*. You'll see how later.
+In this example above the *CLI option* `--size` is just a "flag" or "switch" that will contain a boolean value, `True` or `False`, depending on if it was added to the command or not.
+
+This one doesn't receive any values. But *CLI options* can also receive values like *CLI arguments*. You'll see how later.
+
+///
 
 ## Add one *CLI option*
 
 Now add a `--formal` *CLI option*:
 
-```Python hl_lines="4 5"
-{!../docs_src/first_steps/tutorial004.py!}
-```
+{* docs_src/first_steps/tutorial004.py hl[4,5] *}
 
 Here `formal` is a `bool` that is `False` by default.
 
@@ -231,46 +233,49 @@ Here `formal` is a `bool` that is `False` by default.
 
 ```console
 // Get the help
-$ python main.py --help
+$ uv run python main.py --help
 
-Usage: main.py [OPTIONS] NAME LASTNAME
-
-Arguments:
-  NAME      [required]
-  LASTNAME  [required]
-
-Options:
-  --formal / --no-formal  [default: False]
-  --install-completion    Install completion for the current shell.
-  --show-completion       Show completion for the current shell, to copy it or customize the installation.
-  --help                  Show this message and exit.
+<b> </b><font color="#F4BF75"><b>Usage: </b></font><b>main.py [OPTIONS] {name} {lastname}                            </b>
+<b>                                                                   </b>
+<font color="#A5A5A1">╭─ Arguments ─────────────────────────────────────────────────────╮</font>
+<font color="#A5A5A1">│ </font><font color="#F92672">*</font>    name          <font color="#F4BF75"><b>&lt;str&gt;</b></font>  <font color="#A6194C">[required]</font>                            │
+<font color="#A5A5A1">│ </font><font color="#F92672">*</font>    lastname      <font color="#F4BF75"><b>&lt;str&gt;</b></font>  <font color="#A6194C">[required]</font>                            │
+<font color="#A5A5A1">╰─────────────────────────────────────────────────────────────────╯</font>
+<font color="#A5A5A1">╭─ Options ───────────────────────────────────────────────────────╮</font>
+<font color="#A5A5A1">│ </font><font color="#A1EFE4"><b>--formal</b></font>                <font color="#AE81FF"><b>--no-formal</b></font>      [default: no-formal]   │
+<font color="#A5A5A1">│ </font><font color="#A1EFE4"><b>--help</b></font>                                   Show this message and  │
+<font color="#A5A5A1">│                                          exit.                  │</font>
+<font color="#A5A5A1">╰─────────────────────────────────────────────────────────────────╯</font>
 ```
 
 </div>
 
-!!! tip
-    Notice that it automatically creates a `--formal` and a `--no-formal` because it detected that `formal` is a `bool`.
+/// tip
+
+Notice that it automatically creates a `--formal` and a `--no-formal` because it detected that `formal` is a `bool`.
+
+///
 
 Now call it normally:
 
 <div class="termy">
 
 ```console
-$ python main.py Camila Gutiérrez
+$ uv run python main.py Camila Gutiérrez
 
 Hello Camila Gutiérrez
 
 // But if you pass --formal
-$ python main.py Camila Gutiérrez --formal
+$ uv run python main.py Camila Gutiérrez --formal
 
 Good day Ms. Camila Gutiérrez.
 
 // And as --formal is a CLI option you can put it anywhere in this command
-$ python main.py Camila --formal Gutiérrez
+$ uv run python main.py Camila --formal Gutiérrez
 
 Good day Ms. Camila Gutiérrez.
 
-$ python main.py --formal Camila Gutiérrez
+$ uv run python main.py --formal Camila Gutiérrez
 
 Good day Ms. Camila Gutiérrez.
 ```
@@ -281,62 +286,66 @@ Good day Ms. Camila Gutiérrez.
 
 To convert the `lastname` from a *CLI argument* to a *CLI option*, give it a default value of `""`:
 
-```Python hl_lines="4"
-{!../docs_src/first_steps/tutorial005.py!}
-```
+{* docs_src/first_steps/tutorial005.py hl[4] *}
 
 As `lastname` now has a default value of `""` (an empty string) it is no longer required in the function, and **Typer** will now by default make it an optional *CLI option*.
 
 <div class="termy">
 
 ```console
-$ python main.py --help
+$ uv run python main.py --help
 
-Usage: main.py [OPTIONS] NAME
-
-Arguments:
-  NAME  [required]
-
-Options:
-  --lastname TEXT         [default: ]
-  --formal / --no-formal  [default: False]
-  --install-completion    Install completion for the current shell.
-  --show-completion       Show completion for the current shell, to copy it or customize the installation.
-  --help                  Show this message and exit.
+<b> </b><font color="#F4BF75"><b>Usage: </b></font><b>main.py [OPTIONS] {name}                                       </b>
+<b>                                                                     </b>
+<font color="#A5A5A1">╭─ Arguments ───────────────────────────────────────────────────────╮</font>
+<font color="#A5A5A1">│ </font><font color="#F92672">*</font>    name      <font color="#F4BF75"><b>&lt;str&gt;</b></font>  <font color="#A6194C">[required]</font>                                  │
+<font color="#A5A5A1">╰───────────────────────────────────────────────────────────────────╯</font>
+<font color="#A5A5A1">╭─ Options ─────────────────────────────────────────────────────────╮</font>
+<font color="#A5A5A1">│ </font><font color="#A1EFE4"><b>--lastname</b></font>                             <font color="#F4BF75"><b>&lt;str&gt;</b></font>                      │
+<font color="#A5A5A1">│ </font><font color="#A1EFE4"><b>--formal</b></font>                <font color="#AE81FF"><b>--no-formal</b></font>    <font color="#F4BF75"><b>    </b></font>  [default: no-formal] │
+<font color="#A5A5A1">│ </font><font color="#A1EFE4"><b>--help</b></font>                                 <font color="#F4BF75"><b>    </b></font>  Show this message    │
+<font color="#A5A5A1">│                                              and exit.            │</font>
+<font color="#A5A5A1">╰───────────────────────────────────────────────────────────────────╯</font>
 ```
 
 </div>
 
-!!! tip
-    Notice the `--lastname`, and notice that it takes a textual value.
+/// tip
 
-    A *CLI option* with a value like `--lastname` (contrary to a *CLI option* without a value, a `bool` flag, like `--formal` or `--size`) takes as its value whatever is at the *right side* of the *CLI option*.
+Notice the `--lastname`, and notice that it takes a textual value.
+
+A *CLI option* with a value like `--lastname` (contrary to a *CLI option* without a value, a `bool` flag, like `--formal` or `--size`) takes as its value whatever is at the *right side* of the *CLI option*.
+
+///
 
 <div class="termy">
 
 ```console
 // Call it without a --lastname
-$ python main.py Camila
+$ uv run python main.py Camila
 
 Hello Camila
 
 // Pass the --lastname
-$ python main.py Camila --lastname Gutiérrez
+$ uv run python main.py Camila --lastname Gutiérrez
 
 Hello Camila Gutiérrez
 ```
 
 </div>
 
-!!! tip
-    Notice that "`Gutiérrez`" is at the right side of `--lastname`. A *CLI option* with a value takes as its value whatever is at the *right side*.
+/// tip
+
+Notice that "`Gutiérrez`" is at the right side of `--lastname`. A *CLI option* with a value takes as its value whatever is at the *right side*.
+
+///
 
 And as `--lastname` is now a *CLI option* that doesn't depend on the order, you can pass it before the name:
 
 <div class="termy">
 
 ```console
-$ python main.py --lastname Gutiérrez Camila
+$ uv run python main.py --lastname Gutiérrez Camila
 
 // and it will still work normally
 Hello Camila Gutiérrez
@@ -348,38 +357,38 @@ Hello Camila Gutiérrez
 
 If you add a <abbr title="a multi-line string as the first expression inside a function (not assigned to any variable) used for documentation">docstring</abbr> to your function it will be used in the help text:
 
-```Python hl_lines="5 6 7 8 9"
-{!../docs_src/first_steps/tutorial006.py!}
-```
+{* docs_src/first_steps/tutorial006.py hl[5,6,7,8,9] *}
 
 Now see it with the `--help` option:
 
 <div class="termy">
 
 ```console
-$ python main.py --help
+$ uv run python main.py --help
 
-Usage: main.py [OPTIONS] NAME
+<b> </b><font color="#F4BF75"><b>Usage: </b></font><b>main.py [OPTIONS] {name}                                       </b>
+<b>                                                                     </b>
+ Say hi to 'name', optionally with a <font color="#A1EFE4"><b>--lastname</b></font>.
+ If <font color="#6B9F98"><b>--formal</b></font><font color="#A5A5A1"> is used, say hi very formally.                          </font>
 
-  Say hi to NAME, optionally with a --lastname.
-
-  If --formal is used, say hi very formally.
-
-Arguments:
-  NAME  [required]
-
-Options:
-  --lastname TEXT         [default: ]
-  --formal / --no-formal  [default: False]
-  --install-completion    Install completion for the current shell.
-  --show-completion       Show completion for the current shell, to copy it or customize the installation.
-  --help                  Show this message and exit.
+<font color="#A5A5A1">╭─ Arguments ───────────────────────────────────────────────────────╮</font>
+<font color="#A5A5A1">│ </font><font color="#F92672">*</font>    name      <font color="#F4BF75"><b>&lt;str&gt;</b></font>  <font color="#A6194C">[required]</font>                                  │
+<font color="#A5A5A1">╰───────────────────────────────────────────────────────────────────╯</font>
+<font color="#A5A5A1">╭─ Options ─────────────────────────────────────────────────────────╮</font>
+<font color="#A5A5A1">│ </font><font color="#A1EFE4"><b>--lastname</b></font>                             <font color="#F4BF75"><b>&lt;str&gt;</b></font>                      │
+<font color="#A5A5A1">│ </font><font color="#A1EFE4"><b>--formal</b></font>                <font color="#AE81FF"><b>--no-formal</b></font>    <font color="#F4BF75"><b>    </b></font>  [default: no-formal] │
+<font color="#A5A5A1">│ </font><font color="#A1EFE4"><b>--help</b></font>                                 <font color="#F4BF75"><b>    </b></font>  Show this message    │
+<font color="#A5A5A1">│                                              and exit.            │</font>
+<font color="#A5A5A1">╰───────────────────────────────────────────────────────────────────╯</font>
 ```
 
 </div>
 
-!!! tip
-    There is another place to document the specific *CLI options* and *CLI arguments* that will show up next to them in the help text as with `--install-completion` or `--help`, you will learn that later in the tutorial.
+/// tip
+
+There is another place to document the specific *CLI options* and *CLI arguments* that will show up next to them in the help text as with `--install-completion` or `--help`, you will learn that later in the tutorial.
+
+///
 
 ## Arguments, options, parameters, optional, required
 
@@ -396,25 +405,28 @@ def main(name: str, lastname: str = ""):
 
 are called "Python function parameters" or "Python function arguments".
 
-!!! note "Technical Details"
-    There's actually a very small distinction in Python between "parameter" and "argument".
+/// note | Technical Details
 
-    It's quite technical... and somewhat pedantic.
+There's actually a very small distinction in Python between "parameter" and "argument".
 
-    One refers to the variable name in a function *declaration*. Like:
-    
-    ```
-    def bring_person(name: str, lastname: str = ""):
-        pass
-    ```
+It's quite technical... and somewhat pedantic.
 
-    The other refers to the value passed when *calling* a function. Like:
+*Parameter* refers to the variable name in a function *declaration*. Like:
 
-    ```
-    person = bring_person("Camila", lastname="Gutiérrez")
-    ```
+```
+def bring_person(name: str, lastname: str = ""):
+    pass
+```
 
-    ...but you will probably see them used interchangeably in most of the places (including here).
+*Argument* refers to the value passed when *calling* a function. Like:
+
+```
+person = bring_person("Camila", lastname="Gutiérrez")
+```
+
+...but you will probably see them used interchangeably in most of the places (including here).
+
+///
 
 #### Python default values
 
@@ -443,7 +455,7 @@ In reality, the parameters that require an order can be made *optional* too. And
 
 ### In **Typer**
 
-To try and make it a bit easier, we'll normally use the words "parameter" or "argument" to refer to Python functions.
+To try and make it a bit easier, we'll normally use the words "parameter" or "argument" to refer to "Python functions parameters" or "Python functions arguments".
 
 We'll use ***CLI argument*** to refer to those *CLI parameters* that depend on the specific order. That are **required** by default.
 
@@ -451,25 +463,25 @@ And we'll use ***CLI option*** to refer to those *CLI parameters* that depend on
 
 We will use ***CLI parameter*** to refer to both, *CLI arguments* and *CLI options*.
 
-## **Typer CLI**
+## The `typer` Command
 
-Now that you know the basics of **Typer**, you might want to install and use [Typer CLI](../typer-cli.md){.internal-link target=_blank}.
+When you [activate the project's virtual environment](install.md#activate-the-virtual-environment), the `typer` command installed in that project becomes available directly in your shell.
 
-**Typer CLI** is a tool to run your **Typer** scripts giving you ✨ auto completion ✨ in your terminal.
+After you install completion for it, this `typer` command allows you to run your scripts with ✨ auto completion ✨ in your terminal.
 
 As an alternative to running with Python:
 
 <div class="termy">
 
 ```console
-$ python main.py
+$ uv run python main.py
 
 Hello World
 ```
 
 </div>
 
-You can run with **Typer CLI**:
+You can run with the `typer` command:
 
 <div class="termy">
 
@@ -485,7 +497,10 @@ Hello World
 
 So you can use it to have auto completion for your own scripts as you continue with the tutorial.
 
-!!! tip
-    Your CLI application built with **Typer** won't need [Typer CLI](../typer-cli.md){.internal-link target=_blank} to have auto completion once you create a Python package.
+/// tip
 
-    But for short scripts and for learning, before creating a Python package, it might be useful.
+Your CLI application built with **Typer** won't need the `typer` command to have auto completion once you create a Python package.
+
+But for short scripts and for learning, before creating a Python package, it might be useful.
+
+///

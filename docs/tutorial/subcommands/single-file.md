@@ -1,10 +1,10 @@
+# SubCommands in a Single File
+
 In some cases, it's possible that your application code needs to live on a single file.
 
 You can still use the same ideas:
 
-```Python
-{!../docs_src/subcommands/tutorial002/main.py!}
-```
+{* docs_src/subcommands/tutorial002/main.py *}
 
 There are several things to notice here...
 
@@ -14,9 +14,7 @@ First, you can create `typer.Typer()` objects and add them to another one at the
 
 It doesn't have to be done after creating the subcommands:
 
-```Python hl_lines="4 5 6 7"
-{!../docs_src/subcommands/tutorial002/main.py!}
-```
+{* docs_src/subcommands/tutorial002/main.py hl[4,5,6,7] *}
 
 You can add the commands (subcommands) to each `typer.Typer()` app later and it will still work.
 
@@ -26,9 +24,7 @@ As you now have subcommands like `create` for `users` and for `items`, you can n
 
 So we use longer names:
 
-```Python hl_lines="11  16  21  26  31"
-{!../docs_src/subcommands/tutorial002/main.py!}
-```
+{* docs_src/subcommands/tutorial002/main.py hl[11,16,21,26,31] *}
 
 ## Command name
 
@@ -42,7 +38,7 @@ To call them like:
 
 ```console
 // We want this ✔️
-$ python main.py items create
+$ uv run python main.py items create
 ```
 
 </div>
@@ -53,16 +49,14 @@ instead of:
 
 ```console
 // We don't want this ⛔️
-$ python main.py items items-create
+$ uv run python main.py items items-create
 ```
 
 </div>
 
 So we pass the name we want to use for each subcommand as the function argument to the decorator:
 
-```Python hl_lines="10  15  20  25  30"
-{!../docs_src/subcommands/tutorial002/main.py!}
-```
+{* docs_src/subcommands/tutorial002/main.py hl[10,15,20,25,30] *}
 
 ## Check it
 
@@ -73,7 +67,7 @@ It still works the same:
 
 ```console
 // Check the help
-$ python main.py --help
+$ uv run python main.py --help
 
 Usage: main.py [OPTIONS] COMMAND [ARGS]...
 
@@ -97,7 +91,7 @@ Check the `items` command:
 
 ```console
 // Check the help for items
-$ python main.py items --help
+$ uv run python main.py items --help
 
 // It shows its own commands (subcommands): create, delete, sell
 Usage: main.py items [OPTIONS] COMMAND [ARGS]...
@@ -111,11 +105,11 @@ Commands:
   sell
 
 // Try it
-$ python main.py items create Wand
+$ uv run python main.py items create Wand
 
 Creating item: Wand
 
-$ python main.py items sell Vase
+$ uv run python main.py items sell Vase
 
 Selling item: Vase
 ```
@@ -128,7 +122,7 @@ And the same for the `users` command:
 <div class="termy">
 
 ```console
-$ python main.py users --help
+$ uv run python main.py users --help
 
 Usage: main.py users [OPTIONS] COMMAND [ARGS]...
 
@@ -140,7 +134,7 @@ Commands:
   delete
 
 // Try it
-$ python main.py users create Camila
+$ uv run python main.py users create Camila
 
 Creating user: Camila
 ```

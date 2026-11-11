@@ -1,4 +1,8 @@
+from typing import Annotated
+
 import typer
+
+app = typer.Typer()
 
 
 def name_callback(value: str):
@@ -7,9 +11,10 @@ def name_callback(value: str):
     return value
 
 
-def main(name: str = typer.Option(..., callback=name_callback)):
-    typer.echo(f"Hello {name}")
+@app.command()
+def main(name: Annotated[str | None, typer.Option(callback=name_callback)] = None):
+    print(f"Hello {name}")
 
 
 if __name__ == "__main__":
-    typer.run(main)
+    app()

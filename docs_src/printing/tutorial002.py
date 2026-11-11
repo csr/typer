@@ -1,9 +1,13 @@
 import typer
+from rich import print
+
+app = typer.Typer()
 
 
-def main(name: str):
-    typer.secho(f"Welcome here {name}", fg=typer.colors.MAGENTA)
+@app.command()
+def main():
+    print("[bold red]Alert![/bold red] [green]Portal gun[/green] shooting! :boom:")
 
 
 if __name__ == "__main__":
-    typer.run(main)
+    app()

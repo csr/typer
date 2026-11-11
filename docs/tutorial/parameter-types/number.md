@@ -1,8 +1,8 @@
+# Number
+
 You can define numeric validations with `max` and `min` values for `int` and `float` *CLI parameters*:
 
-```Python hl_lines="5 6 7"
-{!../docs_src/parameter_types/number/tutorial001.py!}
-```
+{* docs_src/parameter_types/number/tutorial001.py hl[10:12] *}
 
 *CLI arguments* and *CLI options* can both use these validations.
 
@@ -13,54 +13,52 @@ Check it:
 <div class="termy">
 
 ```console
-$ python main.py --help
+$ uv run python main.py --help
 
-// Notice the extra RANGE in the help text for --age and --score
-Usage: main.py [OPTIONS] ID
+// Notice the extra range information in the help text for --age and --score
+Usage: main.py [OPTIONS] {ID}
 
 Arguments:
-  ID  [required]
+  ID <int range>  [0<=x<=1000; required]
 
 Options:
-  --age INTEGER RANGE   [default: 20]
-  --score FLOAT RANGE   [default: 0]
-  --install-completion  Install completion for the current shell.
-  --show-completion     Show completion for the current shell, to copy it or customize the installation.
-  --help                Show this message and exit.
+  --age <int range>      [default: 20; x>=18]
+  --score <float range>  [default: 0; x<=100]
+  --help                 Show this message and exit.
 
 // Pass all the CLI parameters
-$ python main.py 5 --age 20 --score 90
+$ uv run python main.py 5 --age 20 --score 90
 
 ID is 5
 --age is 20
 --score is 90.0
 
 // Pass an invalid ID
-$ python main.py 1002
+$ uv run python main.py 1002
 
-Usage: main.py [OPTIONS] ID
+Usage: main.py [OPTIONS] {ID}
 Try "main.py --help" for help.
 
-Error: Invalid value for 'ID': 1002 is not in the valid range of 0 to 1000.
+Error: Invalid value for 'ID': Input should be less than or equal to 1000
 
 // Pass an invalid age
-$ python main.py 5 --age 15
+$ uv run python main.py 5 --age 15
 
-Usage: main.py [OPTIONS] ID
+Usage: main.py [OPTIONS] {ID}
 Try "main.py --help" for help.
 
-Error: Invalid value for '--age': 15 is smaller than the minimum valid value 18.
+Error: Invalid value for '--age':  Input should be greater than or equal to 18
 
 // Pass an invalid score
-$ python main.py 5 --age 20 --score 100.5
+$ uv run python main.py 5 --age 20 --score 100.5
 
-Usage: main.py [OPTIONS] ID
+Usage: main.py [OPTIONS] {ID}
 Try "main.py --help" for help.
 
-Error: Invalid value for '--score': 100.5 is bigger than the maximum valid value 100.
+Error: Invalid value for '--score': Input should be less than or equal to 100
 
 // But as we didn't specify a minimum score, this is accepted
-$ python main.py 5 --age 20 --score -5
+$ uv run python main.py 5 --age 20 --score -5
 
 ID is 5
 --age is 20
@@ -75,9 +73,7 @@ You might want to, instead of showing an error, use the closest minimum or maxim
 
 You can do it with the `clamp` parameter:
 
-```Python hl_lines="5 6 7"
-{!../docs_src/parameter_types/number/tutorial002.py!}
-```
+{* docs_src/parameter_types/number/tutorial002.py hl[10:12] *}
 
 And then, when you pass data that is out of the valid range, it will be "clamped", the closest valid value will be used:
 
@@ -85,30 +81,28 @@ And then, when you pass data that is out of the valid range, it will be "clamped
 
 ```console
 // ID doesn't have clamp, so it shows an error
-$ python main.py 1002
+$ uv run python main.py 1002
 
-Usage: main.py [OPTIONS] ID
+Usage: main.py [OPTIONS] {ID}
 Try "main.py --help" for help.
 
-Error: Invalid value for 'ID': 1002 is not in the valid range of 0 to 1000.
+Error: Invalid value for 'ID': Input should be less than or equal to 1000
 
 // But --rank and --score use clamp
-$ python main.py 5 --rank 11 --score -5
+$ uv run python main.py 5 --rank 11 --score -5
 
 ID is 5
 --rank is 10
---score is 0
+--score is 0.0
 ```
 
 </div>
 
 ## Counter *CLI options*
 
-You can make a *CLI option* work as a counter with the `counter` parameter:
+You can make a *CLI option* work as a counter with the `count` parameter:
 
-```Python hl_lines="4"
-{!../docs_src/parameter_types/number/tutorial003.py!}
-```
+{* docs_src/parameter_types/number/tutorial003.py hl[9] *}
 
 It means that the *CLI option* will be like a boolean flag, e.g. `--verbose`.
 
@@ -118,32 +112,32 @@ And the value you receive in the function will be the amount of times that `--ve
 
 ```console
 // Check it
-$ python main.py
+$ uv run python main.py
 
 Verbose level is 0
 
 // Now use one --verbose
-$ python main.py --verbose
+$ uv run python main.py --verbose
 
 Verbose level is 1
 
 // Now 3 --verbose
-$ python main.py --verbose --verbose --verbose
+$ uv run python main.py --verbose --verbose --verbose
 
 Verbose level is 3
 
 // And with the short name
-$ python main.py -v
+$ uv run python main.py -v
 
 Verbose level is 1
 
 // And with the short name 3 times
-$ python main.py -v -v -v
+$ uv run python main.py -v -v -v
 
 Verbose level is 3
 
 // As short names can be put together, this also works
-$ python main.py -vvv
+$ uv run python main.py -vvv
 
 Verbose level is 3
 ```

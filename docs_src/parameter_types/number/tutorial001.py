@@ -1,15 +1,20 @@
+from typing import Annotated
+
 import typer
 
+app = typer.Typer()
 
+
+@app.command()
 def main(
-    id: int = typer.Argument(..., min=0, max=1000),
-    age: int = typer.Option(20, min=18),
-    score: float = typer.Option(0, max=100),
+    ID: Annotated[int, typer.Argument(min=0, max=1000)],
+    age: Annotated[int, typer.Option(min=18)] = 20,
+    score: Annotated[float, typer.Option(max=100)] = 0,
 ):
-    typer.echo(f"ID is {id}")
-    typer.echo(f"--age is {age}")
-    typer.echo(f"--score is {score}")
+    print(f"ID is {ID}")
+    print(f"--age is {age}")
+    print(f"--score is {score}")
 
 
 if __name__ == "__main__":
-    typer.run(main)
+    app()

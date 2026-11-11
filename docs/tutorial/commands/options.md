@@ -1,10 +1,10 @@
+# Command CLI Options
+
 Commands can also have their own *CLI options*.
 
 In fact, each command can have different *CLI arguments* and *CLI options*:
 
-```Python hl_lines="7  13 14  24  33"
-{!../docs_src/commands/options/tutorial001.py!}
-```
+{* docs_src/commands/options/tutorial001.py hl[9,15:18,28:30,39] *}
 
 Here we have multiple commands, with different *CLI parameters*:
 
@@ -35,13 +35,16 @@ Commands:
   create
   delete
   delete-all
-  info
+  init
 ```
 
 </div>
 
-!!! tip
-    Check the command `delete-all`, by default command names are generated from the function name, replacing `_` with `-`.
+/// tip
+
+Check the command `delete-all`, by default command names are generated from the function name, replacing `_` with `-`.
+
+///
 
 Test it:
 
@@ -49,46 +52,46 @@ Test it:
 
 ```console
 // Check the command create
-$ python main.py create Camila
+$ uv run python main.py create Camila
 
 Creating user: Camila
 
 // Now test the command delete
-$ python main.py delete Camila
+$ uv run python main.py delete Camila
 
-# Are you sure you want to delete the user? [y/N]: $ y
+# Are you sure you want to delete the user? [y/n]: $ y
 
 Deleting user: Camila
 
-$ python main.py delete Wade
+$ uv run python main.py delete Wade
 
-# Are you sure you want to delete the user? [y/N]: $ n
+# Are you sure you want to delete the user? [y/n]: $ n
 
 Operation cancelled
 
 // And finally, the command delete-all
 // Notice it doesn't have CLI arguments, only a CLI option
 
-$ python main.py delete-all
+$ uv run python main.py delete-all
 
-# Are you sure you want to delete ALL users? [y/N]: $ y
+# Are you sure you want to delete ALL users? [y/n]: $ y
 
 Deleting all users
 
-$ python main.py delete-all
+$ uv run python main.py delete-all
 
-# Are you sure you want to delete ALL users? [y/N]: $ n
+# Are you sure you want to delete ALL users? [y/n]: $ n
 
 Operation cancelled
 
 // And if you pass the --force CLI option, it doesn't need to confirm
 
-$ python main.py delete-all --force
+$ uv run python main.py delete-all --force
 
 Deleting all users
 
 // And init that doesn't take any CLI parameter
-$ python main.py init
+$ uv run python main.py init
 
 Initializing user database
 ```

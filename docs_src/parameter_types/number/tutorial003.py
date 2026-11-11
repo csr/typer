@@ -1,9 +1,14 @@
+from typing import Annotated
+
 import typer
 
+app = typer.Typer()
 
-def main(verbose: int = typer.Option(0, "--verbose", "-v", count=True)):
-    typer.echo(f"Verbose level is {verbose}")
+
+@app.command()
+def main(verbose: Annotated[int, typer.Option("--verbose", "-v", count=True)] = 0):
+    print(f"Verbose level is {verbose}")
 
 
 if __name__ == "__main__":
-    typer.run(main)
+    app()

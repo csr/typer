@@ -1,23 +1,34 @@
+import importlib
 import subprocess
+import sys
 from pathlib import Path
+from types import ModuleType
 
-import typer
+import pytest
 from typer.testing import CliRunner
-
-from docs_src.parameter_types.file import tutorial004 as mod
 
 runner = CliRunner()
 
-app = typer.Typer()
-app.command()(mod.main)
+
+@pytest.fixture(
+    name="mod",
+    params=[
+        pytest.param("tutorial004_non_an"),
+        pytest.param("tutorial004"),
+    ],
+)
+def get_mod(request: pytest.FixtureRequest) -> ModuleType:
+    module_name = f"docs_src.parameter_types.file.{request.param}"
+    mod = importlib.import_module(module_name)
+    return mod
 
 
-def test_main(tmpdir):
+def test_main(tmpdir, mod: ModuleType):
     binary_file = Path(tmpdir) / "config.txt"
-    if binary_file.exists():  # pragma no cover
+    if binary_file.exists():  # pragma: no cover
         binary_file.unlink()
-    result = runner.invoke(app, ["--file", f"{binary_file}"])
-    text = binary_file.read_text()
+    result = runner.invoke(mod.app, ["--file", f"{binary_file}"])
+    text = binary_file.read_text(encoding="utf-8")
     binary_file.unlink()
     assert result.exit_code == 0
     assert "Binary file written" in result.output
@@ -25,11 +36,10 @@ def test_main(tmpdir):
     assert "la cigüeña trae al niño" in text
 
 
-def test_script():
+def test_script(mod: ModuleType):
     result = subprocess.run(
-        ["coverage", "run", mod.__file__, "--help"],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+        [sys.executable, "-m", "coverage", "run", mod.__file__, "--help"],
+        capture_output=True,
         encoding="utf-8",
     )
     assert "Usage" in result.stdout

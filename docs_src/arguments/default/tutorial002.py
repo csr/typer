@@ -1,15 +1,19 @@
 import random
+from typing import Annotated
 
 import typer
+
+app = typer.Typer()
 
 
 def get_name():
     return random.choice(["Deadpool", "Rick", "Morty", "Hiro"])
 
 
-def main(name: str = typer.Argument(get_name)):
-    typer.echo(f"Hello {name}")
+@app.command()
+def main(name: Annotated[str, typer.Argument(default_factory=get_name)]):
+    print(f"Hello {name}")
 
 
 if __name__ == "__main__":
-    typer.run(main)
+    app()

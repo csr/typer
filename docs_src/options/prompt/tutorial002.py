@@ -1,11 +1,17 @@
+from typing import Annotated
+
 import typer
 
+app = typer.Typer()
 
+
+@app.command()
 def main(
-    name: str, lastname: str = typer.Option(..., prompt="Please tell me your last name")
+    name: str,
+    lastname: Annotated[str, typer.Option(prompt="Please tell me your last name")],
 ):
-    typer.echo(f"Hello {name} {lastname}")
+    print(f"Hello {name} {lastname}")
 
 
 if __name__ == "__main__":
-    typer.run(main)
+    app()

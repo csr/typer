@@ -1,3 +1,5 @@
+# Version CLI Option, `is_eager`
+
 You could use a callback to implement a `--version` *CLI option*.
 
 It would show the version of your CLI program and then it would terminate it. Even before any other *CLI parameter* is processed.
@@ -6,12 +8,13 @@ It would show the version of your CLI program and then it would terminate it. Ev
 
 Let's see a first version of how it could look like:
 
-```Python hl_lines="8-11  16-18"
-{!../docs_src/options/version/tutorial001.py!}
-```
+{* docs_src/options/version/tutorial001.py hl[10:13,19:21] *}
 
-!!! tip
-    Notice that we don't have to get the `typer.Context` and check for `ctx.resilient_parsing` for completion to work, because we only print and modify the program when `--version` is passed, otherwise, nothing is printed or changed from the callback.
+/// tip
+
+Notice that we don't have to get the `typer.Context` and check for `ctx.resilient_parsing` for completion to work, because we only print and modify the program when `--version` is passed, otherwise, nothing is printed or changed from the callback.
+
+///
 
 If the `--version` *CLI option* is passed, we get a value `True` in the callback.
 
@@ -24,27 +27,24 @@ Check it:
 <div class="termy">
 
 ```console
-$ python main.py --help
+$ uv run python main.py --help
 
 // We get a --version, and don't get an awkward --no-version 🎉
 Usage: main.py [OPTIONS]
 
 Options:
   --version
-  --name TEXT
-  --install-completion  Install completion for the current shell.
-  --show-completion     Show completion for the current shell, to copy it or customize the installation.
-
+  --name <str>          [default: World]
   --help                Show this message and exit.
 
 
 // We can call it normally
-$ python main.py --name Camila
+$ uv run python main.py --name Camila
 
 Hello Camila
 
 // And we can get the version
-$ python main.py --version
+$ uv run python main.py --version
 
 Awesome CLI Version: 0.1.0
 
@@ -57,16 +57,14 @@ Awesome CLI Version: 0.1.0
 
 But now let's say that the `--name` *CLI option* that we declared before `--version` is required, and it has a callback that could exit the program:
 
-```Python hl_lines="14-16  21-23"
-{!../docs_src/options/version/tutorial002.py!}
-```
+{* docs_src/options/version/tutorial002.py hl[16:19,25:27] *}
 
 Then our CLI program could not work as expected in some cases as it is *right now*, because if we use `--version` after `--name` then the callback for `--name` will be processed before and we can get its error:
 
 <div class="termy">
 
 ```console
-$ python main.py --name Rick --version
+$ uv run python main.py --name Rick --version
 
 Only Camila is allowed
 Aborted!
@@ -74,31 +72,38 @@ Aborted!
 
 </div>
 
-!!! tip
-    We don't have to check for `ctx.resilient_parsing` in the `name_callback()` for completion to work, because we are not using `typer.echo()`, instead we are raising a `typer.BadParameter`.
+/// tip
 
-!!! note "Technical Details"
-    `typer.BadParameter` prints the error to "standard error", not to "standard output", and because the completion system only reads from "standard output", it won't break completion.
+We don't have to check for `ctx.resilient_parsing` in the `name_callback()` for completion to work, because we are not using `typer.echo()`, instead we are raising a `typer.BadParameter`.
 
-!!! info
-    If you need a refresher about what is "standard output" and "standard error" check the section in [Printing and Colors: "Standard Output" and "Standard Error"](../printing.md#standard-output-and-standard-error){.internal-link target=_blank}.
+///
+
+/// note | Technical Details
+
+`typer.BadParameter` prints the error to "standard error", not to "standard output", and because the completion system only reads from "standard output", it won't break completion.
+
+///
+
+/// note
+
+If you need a refresher about what is "standard output" and "standard error" check the section in [Printing and Colors: "Standard Output" and "Standard Error"](../printing.md#standard-output-and-standard-error).
+
+///
 
 ### Fix with `is_eager`
 
 For those cases, we can mark a *CLI parameter* (a *CLI option* or *CLI argument*) with `is_eager=True`.
 
-That will tell **Typer** (actually Click) that it should process this *CLI parameter* before the others:
+That will tell **Typer** that it should process this *CLI parameter* before the others:
 
-```Python hl_lines="22-24"
-{!../docs_src/options/version/tutorial003.py!}
-```
+{* docs_src/options/version/tutorial003.py hl[25:28] *}
 
 Check it:
 
 <div class="termy">
 
 ```console
-$ python main.py --name Rick --version
+$ uv run python main.py --name Rick --version
 
 // Now we only get the version, and the name is not used
 Awesome CLI Version: 0.1.0

@@ -1,15 +1,17 @@
 from pathlib import Path
-from typing import List
 
 import typer
 
+app = typer.Typer()
 
-def main(files: List[Path], celebration: str):
+
+@app.command()
+def main(files: list[Path], celebration: str):
     for path in files:
         if path.is_file():
-            typer.echo(f"This file exists: {path.name}")
-            typer.echo(celebration)
+            print(f"This file exists: {path.name}")
+            print(celebration)
 
 
 if __name__ == "__main__":
-    typer.run(main)
+    app()

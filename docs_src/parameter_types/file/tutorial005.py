@@ -1,10 +1,15 @@
+from typing import Annotated
+
 import typer
 
+app = typer.Typer()
 
-def main(config: typer.FileText = typer.Option(..., mode="a")):
+
+@app.command()
+def main(config: Annotated[typer.FileText, typer.Option(mode="a")]):
     config.write("This is a single line\n")
-    typer.echo("Config line written")
+    print("Config line written")
 
 
 if __name__ == "__main__":
-    typer.run(main)
+    app()

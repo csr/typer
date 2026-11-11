@@ -1,10 +1,15 @@
+from typing import Annotated
+
 import typer
 
+app = typer.Typer()
 
-def main(config: typer.FileTextWrite = typer.Option(...)):
+
+@app.command()
+def main(config: Annotated[typer.FileTextWrite, typer.Option()]):
     config.write("Some config written by the app")
-    typer.echo("Config written")
+    print("Config written")
 
 
 if __name__ == "__main__":
-    typer.run(main)
+    app()

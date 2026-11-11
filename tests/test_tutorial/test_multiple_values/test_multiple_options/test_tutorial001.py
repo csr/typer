@@ -1,31 +1,44 @@
+import importlib
 import subprocess
+import sys
+from types import ModuleType
 
-import typer
+import pytest
 from typer.testing import CliRunner
 
-from docs_src.multiple_values.multiple_options import tutorial001 as mod
-
 runner = CliRunner()
-app = typer.Typer()
-app.command()(mod.main)
 
 
-def test_main():
-    result = runner.invoke(app)
+@pytest.fixture(
+    name="mod",
+    params=[
+        pytest.param("tutorial001_non_an"),
+        pytest.param("tutorial001"),
+    ],
+)
+def get_mod(request: pytest.FixtureRequest) -> ModuleType:
+    module_name = f"docs_src.multiple_values.multiple_options.{request.param}"
+    mod = importlib.import_module(module_name)
+    return mod
+
+
+def test_main(mod: ModuleType):
+    result = runner.invoke(mod.app)
     assert result.exit_code != 0
     assert "No provided users" in result.output
-    assert "Aborted!" in result.output
+    assert "raw input = None" in result.output
+    assert "Aborted" in result.output
 
 
-def test_1_user():
-    result = runner.invoke(app, ["--user", "Camila"])
+def test_1_user(mod: ModuleType):
+    result = runner.invoke(mod.app, ["--user", "Camila"])
     assert result.exit_code == 0
     assert "Processing user: Camila" in result.output
 
 
-def test_3_user():
+def test_3_user(mod: ModuleType):
     result = runner.invoke(
-        app, ["--user", "Camila", "--user", "Rick", "--user", "Morty"]
+        mod.app, ["--user", "Camila", "--user", "Rick", "--user", "Morty"]
     )
     assert result.exit_code == 0
     assert "Processing user: Camila" in result.output
@@ -33,11 +46,10 @@ def test_3_user():
     assert "Processing user: Morty" in result.output
 
 
-def test_script():
+def test_script(mod: ModuleType):
     result = subprocess.run(
-        ["coverage", "run", mod.__file__, "--help"],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+        [sys.executable, "-m", "coverage", "run", mod.__file__, "--help"],
+        capture_output=True,
         encoding="utf-8",
     )
     assert "Usage" in result.stdout

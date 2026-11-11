@@ -9,9 +9,13 @@ class NeuralNetwork(str, Enum):
     lstm = "lstm"
 
 
+app = typer.Typer()
+
+
+@app.command()
 def main(network: NeuralNetwork = NeuralNetwork.simple):
-    typer.echo(f"Training neural network of type: {network.value}")
+    print(f"Training neural network of type: {network.value}")
 
 
 if __name__ == "__main__":
-    typer.run(main)
+    app()

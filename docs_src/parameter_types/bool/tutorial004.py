@@ -1,12 +1,17 @@
+from typing import Annotated
+
 import typer
 
+app = typer.Typer()
 
-def main(in_prod: bool = typer.Option(True, " /--demo", " /-d")):
+
+@app.command()
+def main(in_prod: Annotated[bool, typer.Option(" /--demo", " /-d")] = True):
     if in_prod:
-        typer.echo("Running in production")
+        print("Running in production")
     else:
-        typer.echo("Running demo")
+        print("Running demo")
 
 
 if __name__ == "__main__":
-    typer.run(main)
+    app()

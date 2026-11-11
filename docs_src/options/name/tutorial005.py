@@ -1,15 +1,20 @@
+from typing import Annotated
+
 import typer
 
+app = typer.Typer()
 
+
+@app.command()
 def main(
-    name: str = typer.Option(..., "--name", "-n"),
-    formal: bool = typer.Option(False, "--formal", "-f"),
+    name: Annotated[str, typer.Option("--name", "-n")],
+    formal: Annotated[bool, typer.Option("--formal", "-f")] = False,
 ):
     if formal:
-        typer.echo(f"Good day Ms. {name}.")
+        print(f"Good day Ms. {name}.")
     else:
-        typer.echo(f"Hello {name}")
+        print(f"Hello {name}")
 
 
 if __name__ == "__main__":
-    typer.run(main)
+    app()

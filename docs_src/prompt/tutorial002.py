@@ -1,13 +1,16 @@
 import typer
 
+app = typer.Typer()
 
+
+@app.command()
 def main():
     delete = typer.confirm("Are you sure you want to delete it?")
     if not delete:
-        typer.echo("Not deleting")
+        print("Not deleting")
         raise typer.Abort()
-    typer.echo("Deleting it!")
+    print("Deleting it!")
 
 
 if __name__ == "__main__":
-    typer.run(main)
+    app()

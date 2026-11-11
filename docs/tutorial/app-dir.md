@@ -1,8 +1,8 @@
+# CLI Application Directory
+
 You can get the application directory where you can, for example, save configuration files with `typer.get_app_dir()`:
 
-```Python hl_lines="9"
-{!../docs_src/app_dir/tutorial001.py!}
-```
+{* docs_src/app_dir/tutorial001.py hl[12] *}
 
 It will give you a directory for storing configurations appropriate for your CLI program for the current user in each operating system.
 
@@ -11,7 +11,7 @@ Check it:
 <div class="termy">
 
 ```console
-$ python main.py
+$ uv run python main.py
 
 Config file doesn't exist yet
 ```
@@ -32,7 +32,7 @@ If the first element is a `Path` object the next ones (after the `/`) can be `st
 
 And it will create a new `Path` object from that.
 
-If you want a quick guide on using `Path()` you can check <a href="https://realpython.com/python-pathlib/" class="external-link" target="_blank">this post on Real Python</a> or <a href="https://treyhunner.com/2018/12/why-you-should-be-using-pathlib/" class="external-link" target="_blank">this post by Trey Hunner</a>.
+If you want a quick guide on using `Path()` you can check [this post on Real Python](https://realpython.com/python-pathlib/) or [this post by Trey Hunner](https://treyhunner.com/2018/12/why-you-should-be-using-pathlib/).
 
 In the code above, we are also explicitly declaring `config_path` as having type `Path` to help the editor provide completion and type checks:
 

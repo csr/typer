@@ -1,9 +1,14 @@
+from typing import Annotated
+
 import typer
 
+app = typer.Typer()
 
-def main(name: str, lastname: str = typer.Option(...)):
-    typer.echo(f"Hello {name} {lastname}")
+
+@app.command()
+def main(name: str, lastname: Annotated[str, typer.Option()]):
+    print(f"Hello {name} {lastname}")
 
 
 if __name__ == "__main__":
-    typer.run(main)
+    app()

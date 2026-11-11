@@ -1,51 +1,64 @@
+import importlib
 import subprocess
+import sys
+from types import ModuleType
 
-import typer
+import pytest
 from typer.testing import CliRunner
-
-from docs_src.options.name import tutorial005 as mod
 
 runner = CliRunner()
 
-app = typer.Typer()
-app.command()(mod.main)
+
+@pytest.fixture(
+    name="mod",
+    params=[
+        pytest.param("tutorial005_non_an"),
+        pytest.param("tutorial005"),
+    ],
+)
+def get_mod(request: pytest.FixtureRequest) -> ModuleType:
+    module_name = f"docs_src.options.name.{request.param}"
+    mod = importlib.import_module(module_name)
+    return mod
 
 
-def test_option_help():
-    result = runner.invoke(app, ["--help"])
+def test_option_help(mod: ModuleType):
+    result = runner.invoke(mod.app, ["--help"])
     assert result.exit_code == 0
-    assert "-n, --name TEXT" in result.output
-    assert "-f, --formal" in result.output
+    assert "-n" in result.output
+    assert "--name" in result.output
+    assert "<str>" in result.output
+    assert "-f" in result.output
+    assert "--formal" in result.output
 
 
-def test_call():
-    result = runner.invoke(app, ["-n", "Camila"])
+def test_call(mod: ModuleType):
+    result = runner.invoke(mod.app, ["-n", "Camila"])
     assert result.exit_code == 0
     assert "Hello Camila" in result.output
 
 
-def test_call_formal():
-    result = runner.invoke(app, ["-n", "Camila", "-f"])
+def test_call_formal(mod: ModuleType):
+    result = runner.invoke(mod.app, ["-n", "Camila", "-f"])
     assert result.exit_code == 0
     assert "Good day Ms. Camila." in result.output
 
 
-def test_call_formal_condensed():
-    result = runner.invoke(app, ["-fn", "Camila"])
+def test_call_formal_condensed(mod: ModuleType):
+    result = runner.invoke(mod.app, ["-fn", "Camila"])
     assert result.exit_code == 0
     assert "Good day Ms. Camila." in result.output
 
 
-def test_call_condensed_wrong_order():
-    result = runner.invoke(app, ["-nf", "Camila"])
+def test_call_condensed_wrong_order(mod: ModuleType):
+    result = runner.invoke(mod.app, ["-nf", "Camila"])
     assert result.exit_code != 0
 
 
-def test_script():
+def test_script(mod: ModuleType):
     result = subprocess.run(
-        ["coverage", "run", mod.__file__, "--help"],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+        [sys.executable, "-m", "coverage", "run", mod.__file__, "--help"],
+        capture_output=True,
         encoding="utf-8",
     )
     assert "Usage" in result.stdout

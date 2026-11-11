@@ -1,12 +1,17 @@
+from typing import Annotated
+
 import typer
 
+app = typer.Typer()
 
-def main(force: bool = typer.Option(False, "--force")):
+
+@app.command()
+def main(force: Annotated[bool, typer.Option("--force")] = False):
     if force:
-        typer.echo("Forcing operation")
+        print("Forcing operation")
     else:
-        typer.echo("Not forcing")
+        print("Not forcing")
 
 
 if __name__ == "__main__":
-    typer.run(main)
+    app()

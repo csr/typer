@@ -1,13 +1,21 @@
+from typing import Annotated
+
 import typer
 
+app = typer.Typer()
 
+
+@app.command()
 def main(
-    name: str = typer.Argument(
-        "Wade Wilson", help="Who to greet", show_default="Deadpoolio the amazing's name"
-    )
+    name: Annotated[
+        str,
+        typer.Argument(
+            help="Who to greet", show_default="Deadpoolio the amazing's name"
+        ),
+    ] = "Wade Wilson",
 ):
-    typer.echo(f"Hello {name}")
+    print(f"Hello {name}")
 
 
 if __name__ == "__main__":
-    typer.run(main)
+    app()

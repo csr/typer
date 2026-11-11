@@ -1,9 +1,16 @@
+from typing import Annotated
+
 import typer
 
+app = typer.Typer()
 
-def main(name: str = typer.Argument("World", envvar=["AWESOME_NAME", "GOD_NAME"])):
-    typer.echo(f"Hello Mr. {name}")
+
+@app.command()
+def main(
+    name: Annotated[str, typer.Argument(envvar=["AWESOME_NAME", "GOD_NAME"])] = "World",
+):
+    print(f"Hello Mr. {name}")
 
 
 if __name__ == "__main__":
-    typer.run(main)
+    app()

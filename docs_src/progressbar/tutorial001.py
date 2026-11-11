@@ -1,17 +1,20 @@
 import time
 
 import typer
+from rich.progress import track
+
+app = typer.Typer()
 
 
+@app.command()
 def main():
     total = 0
-    with typer.progressbar(range(100)) as progress:
-        for value in progress:
-            # Fake processing time
-            time.sleep(0.01)
-            total += 1
-    typer.echo(f"Processed {total} things.")
+    for value in track(range(100), description="Processing..."):
+        # Fake processing time
+        time.sleep(0.01)
+        total += 1
+    print(f"Processed {total} things.")
 
 
 if __name__ == "__main__":
-    typer.run(main)
+    app()
